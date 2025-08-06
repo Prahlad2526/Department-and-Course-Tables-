@@ -1,0 +1,34 @@
+DROP TABLE IF EXISTS Course;
+DROP TABLE IF EXISTS Department;
+
+CREATE TABLE Department (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Course (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(100) NOT NULL,
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Department(DeptID)
+);
+
+INSERT INTO Department (DeptID, DeptName) VALUES
+(1, 'Computer Science'),
+(2, 'Electrical Engineering'),
+(3, 'Mechanical Engineering');
+
+INSERT INTO Course (CourseID, CourseName, DeptID) VALUES
+(101, 'Data Structures', 1),
+(102, 'Operating Systems', 1),
+(103, 'DBMS', 1),
+(201, 'Circuits', 2),
+(202, 'Electromagnetics', 2),
+(301, 'Thermodynamics', 3);
+
+SELECT DeptName FROM Department
+WHERE DeptID IN (
+    SELECT DeptID FROM Course
+    GROUP BY DeptID
+    HAVING COUNT(*) > 2
+);
